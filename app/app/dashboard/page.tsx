@@ -46,11 +46,11 @@ async function getDashboardData(userId: string) {
     })
 
     // Calculate stats
-    const totalMigrations = migrationCounts.reduce((acc, item) => acc + item._count, 0)
-    const completedMigrations = migrationCounts.find(item => item.status === 'COMPLETED')?._count || 0
-    const inProgressMigrations = migrationCounts.find(item => item.status === 'IN_PROGRESS')?._count || 0
-    const failedMigrations = migrationCounts.find(item => item.status === 'FAILED')?._count || 0
-    const pendingMigrations = migrationCounts.find(item => item.status === 'PENDING')?._count || 0
+    const totalMigrations = migrationCounts.reduce((acc: number, item: any) => acc + item._count, 0)
+    const completedMigrations = migrationCounts.find((item: any) => item.status === 'COMPLETED')?._count || 0
+    const inProgressMigrations = migrationCounts.find((item: any) => item.status === 'IN_PROGRESS')?._count || 0
+    const failedMigrations = migrationCounts.find((item: any) => item.status === 'FAILED')?._count || 0
+    const pendingMigrations = migrationCounts.find((item: any) => item.status === 'PENDING')?._count || 0
     
     const successRate = totalMigrations > 0 ? Math.round((completedMigrations / totalMigrations) * 100) : 100
 
@@ -65,7 +65,7 @@ async function getDashboardData(userId: string) {
         dataTransferred: formatBytes(Number(dataTransferred._sum.migratedSize || 0)),
         successRate
       },
-      recentMigrations: recentMigrations.map(migration => ({
+      recentMigrations: recentMigrations.map((migration: any) => ({
         id: migration.id,
         title: migration.title,
         status: migration.status,

@@ -53,7 +53,7 @@ export async function GET(request: NextRequest) {
     const total = await prisma.migration.count({ where })
 
     return NextResponse.json({
-      migrations: migrations.map(migration => ({
+      migrations: migrations.map((migration: any) => ({
         id: migration.id,
         title: migration.title,
         description: migration.description,

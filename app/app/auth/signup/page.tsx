@@ -3,12 +3,14 @@
 
 import { useState } from 'react'
 import { useRouter } from 'next/navigation'
+import { signIn } from 'next-auth/react'
 import Link from 'next/link'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
-import { GitBranch, Eye, EyeOff, Loader2, Mail, Lock, User, Building } from 'lucide-react'
+import { Separator } from '@/components/ui/separator'
+import { GitBranch, Eye, EyeOff, Loader2, Mail, Lock, User, Building, Github } from 'lucide-react'
 import { useToast } from '@/hooks/use-toast'
 
 export default function SignUpPage() {
@@ -23,8 +25,25 @@ export default function SignUpPage() {
   const [showPassword, setShowPassword] = useState(false)
   const [showConfirmPassword, setShowConfirmPassword] = useState(false)
   const [isLoading, setIsLoading] = useState(false)
+  const [isOAuthLoading, setIsOAuthLoading] = useState<string | null>(null)
   const router = useRouter()
   const { toast } = useToast()
+
+  const handleOAuthSignIn = async (provider: 'github' | 'gitlab') => {
+    setIsOAuthLoading(provider)
+    try {
+      await signIn(provider, {
+        callbackUrl: '/dashboard'
+      })
+    } catch (error) {
+      toast({
+        title: 'Error',
+        description: `Failed to sign in with ${provider}. Please try again.`,
+        variant: 'destructive',
+      })
+      setIsOAuthLoading(null)
+    }
+  }
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -117,6 +136,46 @@ export default function SignUpPage() {
             </CardDescription>
           </CardHeader>
           <CardContent>
+            {/* OAuth Options */}
+            <div className="space-y-3 mb-6">
+              <Button
+                variant="outline"
+                className="w-full"
+                onClick={() => handleOAuthSignIn('github')}
+                disabled={isOAuthLoading !== null}
+              >
+                {isOAuthLoading === 'github' ? (
+                  <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                ) : (
+                  <Github className="mr-2 h-4 w-4" />
+                )}
+                Continue with GitHub
+              </Button>
+              
+              <Button
+                variant="outline"
+                className="w-full"
+                onClick={() => handleOAuthSignIn('gitlab')}
+                disabled={isOAuthLoading !== null}
+              >
+                {isOAuthLoading === 'gitlab' ? (
+                  <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                ) : (
+                  <svg className="mr-2 h-4 w-4" viewBox="0 0 24 24" fill="currentColor">
+                    <path d="m23.6004 9.5927-.0337-.0862L20.3.9814a.851.851 0 0 0-.3362-.405.8748.8748 0 0 0-.9997.0539.8748.8748 0 0 0-.29.4399l-2.2055 6.748H7.5375l-2.2057-6.748a.8573.8573 0 0 0-.29-.4412.8748.8748 0 0 0-.9997-.0537.8585.8585 0 0 0-.3362.405L.4332 9.5015l-.0325.0862a6.0657 6.0657 0 0 0 2.0119 7.0105l.0113.0087.03.0213 4.976 3.7264 2.462 1.8633 1.4995 1.1321a1.0085 1.0085 0 0 0 1.2197 0l1.4995-1.1321 2.4619-1.8633 5.006-3.7489.0125-.01a6.0682 6.0682 0 0 0 2.0094-7.003z"/>
+                  </svg>
+                )}
+                Continue with GitLab
+              </Button>
+            </div>
+
+            <div className="relative mb-6">
+              <Separator />
+              <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-background px-2">
+                <span className="text-xs text-muted-foreground">OR</span>
+              </div>
+            </div>
+
             <form onSubmit={handleSubmit} className="space-y-4">
               <div className="grid grid-cols-2 gap-4">
                 <div className="form-field">

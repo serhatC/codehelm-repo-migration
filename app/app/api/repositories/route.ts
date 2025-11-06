@@ -48,7 +48,7 @@ export async function GET(request: NextRequest) {
     })
 
     return NextResponse.json({
-      repositories: repositories.map(repo => ({
+      repositories: repositories.map((repo: any) => ({
         id: repo.id,
         name: repo.name,
         fullName: repo.fullName,

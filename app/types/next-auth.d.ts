@@ -10,6 +10,8 @@ declare module 'next-auth' {
       image?: string | null
       isPremium: boolean
     }
+    accessToken?: string
+    provider?: string
   }
 
   interface User {
@@ -25,5 +27,7 @@ declare module 'next-auth/jwt' {
   interface JWT {
     id: string
     isPremium: boolean
+    accessToken?: string
+    provider?: string
   }
 }

@@ -184,7 +184,7 @@ export default function LandingPage() {
                 Get Started Free
               </Link>
             </Button>
-            <Button size="lg" variant="outline" className="border-primary-foreground text-primary-foreground hover:bg-primary-foreground hover:text-primary" asChild>
+            <Button size="lg" variant="outline" className="border-white bg-transparent text-white hover:bg-white hover:text-primary" asChild>
               <Link href="/premium">View Pricing</Link>
             </Button>
           </div>
